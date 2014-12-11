@@ -40,7 +40,6 @@
   </head>
 
   <body>
-
     <div class="site-wrapper container">
       <div class="site-wrapper-inner">
         <div class="col-sm-12">
@@ -50,75 +49,27 @@
               <h3 class="masthead-brand">Cover</h3>
               <nav>
                 <ul class="nav masthead-nav">
-                  <li class="active"><a href="#">Home</a></li>
-                  <li><a href="#">Features</a></li>
-                  <li><a href="#">Contact</a></li>
+                  <li class="active" id ="Section1LinkItem"><a href="#Section1/">Section1</a></li>
+                  <li id="Section2LinkItem"><a href="#Section2/">Section2</a></li>
                 </ul>
               </nav>
             </div>
           </div>
 
-
-
-              <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-
-
-
-
-                <!-- Slider Content (Wrapper for slides )-->
-                <div class="carousel-inner">
-                  <div class="item active">
-                    <!--<img src="..." alt="...">-->
-                    <div class="inner cover">
-                      <h1 class="cover-heading">Cover your page.</h1>
-                      <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>
-                      <p class="lead">
-                        <a href="#" class="btn btn-lg btn-default">Learn more</a>
-                      </p>
-                    </div>
-                  </div>
-                  <div class="item">
-                    <div class="inner cover">
-                      <h1 class="cover-heading">Cover your page.</h1>
-                      <p class="lead">Cover is a one-page template for building simple and beautiful home pages. </p>
-                      <p class="lead">
-                        <a href="#" class="btn btn-lg btn-default">Learn more</a>
-                      </p>
-                    </div>
-                  </div>
-                  <div class="item">
-                    <div class="inner cover">
-                      <h1 class="cover-heading">Cover your page.</h1>
-                      <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>
-                      <p class="lead">
-                        <a href="#" class="btn btn-lg btn-default">Learn more</a>
-                      </p>
-                    </div>
-                  </div>
-                  This stays
-                </div>
-
-                <!-- Indicators -->
-                <ol class="carousel-indicators">
-                  <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                  <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                  <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                </ol>
-                <!-- Controls -->
-                <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
-                  <span class="glyphicon glyphicon-chevron-left"></span>
-                </a>
-                <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
-                  <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-              </div>
-
-              <div class="mastfoot">
-                <div class="inner">
-                  <p> Presentation by <a href="grantbrown.github.io">Grant Brown</a> </p>
-                </div>
-              </div>
+          <div  class = "main-content-section">
+          <div id="main-content" class = "col-sm-12">
+            <div id="contentholder">
             </div>
+          </div>
+          </div>
+
+          <div class="mastfoot">
+            <div class="inner">
+              <p> Presentation by <a href="grantbrown.github.io">Grant Brown</a> </p>
+            </div>
+          </div>
+
+        </div>
         </div>
       </div>
     </div>
@@ -127,9 +78,92 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="./jquery/jquery-1.11.1.min.js"></script>
-    <script src="./bootstrap/js/bootstrap.min.js"></script>
+    <script src="./jquery/jquery.debounce-1.0.5.js"></script>
+    <script src="./bootstrap/js/bootstrap.js"></script>
     <script src="./js/docs.min.js"></script>
-    <script src="./js/normalizeCarouselHeight.js">
+    <script src="./js/normalizeCarouselHeight.js"></script>
+    <script src="./js/handleCarouselChanges.js"></script>
+    <script>
+
+      var contentHolder = $("#contentholder");
+      var navigationAnimationDelay = 100;
+      var sectionList = ["Section1", "Section2"];
+      swapContent = function(containerName, jqResult, url,delay, callback)
+      {
+          var conainer = $("#" + containerName);
+          conainer.height(conainer.height());
+          jqResult.fadeOut(delay, "swing",
+            function(){
+              jqResult.load(url, function(){
+                jqResult.fadeIn(delay, "swing");
+                conainer.height("");
+                callback();
+              });
+            });
+      }
+      function siteNav(){
+        var url = window.location.toString();
+        var params = url.substring(url.lastIndexOf("#"), url.length);
+        var toplevel = params.substring(1, params.lastIndexOf("/"));
+        if (params.indexOf("?") != -1){
+          var idx1 = params.lastIndexOf("?") + 1; var idx2 = params.lastIndexOf("=");
+          var type = params.substring(idx1, idx2);
+          idx1 = params.lastIndexOf("=") + 1;
+          var val = params.substring(idx1, params.length);
+        }
+        else{
+          var type = null;
+          var val = null;
+        }
+        // Act accordingly.
+        if (sectionList.indexOf(toplevel) >= 0)
+        {
+          for (i = 0; i< sectionList.length; i++)
+          {
+             $("#" + sectionList[i] + "LinkItem").removeClass("active");
+          }
+          $("#" + toplevel + "LinkItem").addClass("active");
+          console.log("Switching to: " + toplevel);
+          swapContent("main-content", contentHolder, "./slides/" + toplevel + ".html",0, function(){
+            if (type != null){
+                $("#carousel-generic").carousel(val);
+            }
+            else {
+            }
+          });
+        }
+        else
+        {
+            console.log("Path not recognized: " + toplevel);
+            console.log("Switching to section 1.");
+            for (i = 1; i< sectionList.length; i++)
+            {
+               $("#" + sectionList[i] + "LinkItem").removeClass("active");
+            }
+            $("#Section1LinkItem").addClass("active");
+            swapContent("main-content", contentHolder, "./slides/Section1.html",0, function(){
+            });
+        }
+      }
+
+      window.onhashchange = function(){
+          console.log("Hash change event");
+          siteNav();
+
+          $(document).on("keydown", $.debounce(function (e) {
+            console.log(e);
+            switch (e.which) {
+              case 37: $("#carousel-generic").carousel("prev"); break
+              case 39: $("#carousel-generic").carousel("next"); break
+              default: return
+            }
+          }, 10));
+      }
+
+      $(document).ready(function(){
+        siteNav();
+      });
+    </script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="./js/ie10-viewport-bug-workaround.js"></script>
   </body>
