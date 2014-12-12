@@ -1,0 +1,23 @@
+.carousel .carousel-control { visibility: hidden; }
+.carousel:hover .carousel-control { visibility: visible; }
+
+.carousel-indicators {
+  margin-top:20px;
+
+}
+.carousel-inner {
+   margin-top:20px;
+   margin-bottom:20px;
+}
+.cover-container {
+  margin-bottom:60px;
+}
+
+.vertical-center{
+    text-align: center;
+    position: relative;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }

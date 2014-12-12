@@ -31,6 +31,7 @@
 
     <!-- Custom styles for this template -->
     <link href="./css/cover.css" rel="stylesheet">
+    <link href="./css/jobtalk.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -40,39 +41,55 @@
   </head>
 
   <body>
-    <div class="site-wrapper container">
-      <div class="site-wrapper-inner">
-        <div class="col-sm-12">
+  <div class="site-wrapper container">
+    <div class="site-wrapper-inner">
         <div class="cover-container">
-          <div class="masthead clearfix">
+          <div class="navbar navbar-fixed-top masthead clearfix">
             <div class="inner">
-              <h3 class="masthead-brand">Cover</h3>
-              <nav>
-                <ul class="nav masthead-nav">
-                  <li class="active" id ="Section1LinkItem"><a href="#Section1/">Section1</a></li>
-                  <li id="Section2LinkItem"><a href="#Section2/">Section2</a></li>
-                </ul>
-              </nav>
+              <div class = "row">
+                <div class = "col-sm-2">
+                  <h3 class="masthead-brand">Cover</h3>
+                </div>
+                <div class="col-sm-3">
+                  <ol id="carouselIndicatorsList" class="carousel-indicators"></ol>
+                </div>
+                <div class = "col-sm-6">
+                  <nav>
+                    <ul class="nav masthead-nav">
+                      <li class="active" id ="Section1LinkItem"><a href="#Section1/">Section1</a></li>
+                      <li id="Section2LinkItem"><a href="#Section2/">Section2</a></li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
 
+
+      <div class="row">
+        <div class="col-sm-12">
           <div  class = "main-content-section">
-          <div id="main-content" class = "col-sm-12">
+          <div id="main-content">
             <div id="contentholder">
             </div>
           </div>
           </div>
-
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
           <div class="mastfoot">
             <div class="inner">
-              <p> Presentation by <a href="grantbrown.github.io">Grant Brown</a> </p>
+              <p> <small>Presentation by <a href="grantbrown.github.io">Grant Brown</a></small> </p>
             </div>
           </div>
-
-        </div>
         </div>
       </div>
     </div>
+  </div>
+
+
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -83,6 +100,7 @@
     <script src="./js/docs.min.js"></script>
     <script src="./js/normalizeCarouselHeight.js"></script>
     <script src="./js/handleCarouselChanges.js"></script>
+    <script src="./js/epidemicIllustration1.js"></script>
     <script>
 
       var contentHolder = $("#contentholder");
@@ -130,6 +148,11 @@
             }
             else {
             }
+            rescaleCarouselItems();
+            generateCarouselIndicators();
+            $("#carousel-generic").on("slid.bs.carousel", function() {
+              activateCanvas();
+            });
           });
         }
         else
@@ -142,6 +165,11 @@
             }
             $("#Section1LinkItem").addClass("active");
             swapContent("main-content", contentHolder, "./slides/Section1.html",0, function(){
+              rescaleCarouselItems();
+              generateCarouselIndicators();
+              $("#carousel-generic").on("slid.bs.carousel", function() {
+                activateCanvas();
+              });
             });
         }
       }
@@ -149,19 +177,17 @@
       window.onhashchange = function(){
           console.log("Hash change event");
           siteNav();
-
-          $(document).on("keydown", $.debounce(function (e) {
-            console.log(e);
-            switch (e.which) {
-              case 37: $("#carousel-generic").carousel("prev"); break
-              case 39: $("#carousel-generic").carousel("next"); break
-              default: return
-            }
-          }, 10));
       }
 
       $(document).ready(function(){
-        siteNav();
+        $(window).trigger("hashchange");
+        $(document).on("keydown", $.debounce(function (e) {
+          switch (e.which) {
+            case 37: $("#carousel-generic").carousel("prev"); break
+            case 39: $("#carousel-generic").carousel("next"); break
+            default: return
+          }
+        }, 10));
       });
     </script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
