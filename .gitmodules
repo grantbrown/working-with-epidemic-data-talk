@@ -1,0 +1,3 @@
+[submodule "js/ExamplesByMesh"]
+	path = js/ExamplesByMesh
+	url = https://github.com/grantbrown/ExamplesByMesh.git

@@ -134,6 +134,7 @@ epidemicCanvas = function(nameVal)
   self.hasInit = false;
   self.isPaused = true;
   self.interval = null;
+  self.agents = [];
 
   self.buildCanvas = function(){
     self.canvas = document.getElementById('epidemicCanvas');
@@ -166,14 +167,14 @@ epidemicCanvas = function(nameVal)
   }
 
   self.moveAndPlotAgents = function(){
-    for (j = 0; j < self.cityList.length; j++)
+    for (j = 0; j < self.agents.length; j++)
     {
-      self.cityList[j].moveAgents();
+      self.agents[j].move();
     }
     self.context.clearRect(0, 0, self.canvas.width, self.canvas.height);
-    for (k = 0; k < self.cityList.length; k++)
+    for (k = 0; k < self.agents.length; k++)
     {
-      self.cityList[k].drawAgents();
+      self.agents[k].draw();
     }
 
   }
@@ -188,6 +189,12 @@ epidemicCanvas = function(nameVal)
       self.cityList = [new city(self.canvas.width/4, self.canvas.height/4, 10, self.context),
                        new city(self.canvas.width - self.canvas.width/4, self.canvas.height - self.canvas.height/4, 10, self.context),
                        new city(self.canvas.width - self.canvas.width/3, self.canvas.height/4 , 5, self.context)]
+      // Keep a global reference.
+      for (l = 0; l < self.cityList.length; l++){
+        for (g =0; g< self.cityList[l].agents.length; g++){
+          self.agents.push(self.cityList[l].agents[g]);
+        }
+      }
     }
   }
 
@@ -228,7 +235,6 @@ epidemicCanvas = function(nameVal)
       });
     }
   }
-
   self.buildCanvas();
 }
 
