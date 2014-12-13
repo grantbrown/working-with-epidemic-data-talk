@@ -1,11 +1,11 @@
 
 
 var nodeRadius = 5;
-var agentSpeed = 5;
+var agentSpeed = 10;
 var agentChangeDirFrac = 0.1;
 var canvasIsActive = false;
-var collisionFrames = 5;
-var p_ei = 0.05;
+var collisionFrames = 1;
+var p_ei = 0.08;
 var p_ir = 0.005;
 var infectProb = 0.5;
 var travelProbability = 0.01;
@@ -368,9 +368,9 @@ epidemicCanvas = function(nameVal)
     }
     else{
       self.hasInit = true;
-      self.cityList = [new city(self.canvas.width/4, self.canvas.height/4, 10, self.context),
-                       new city(self.canvas.width - self.canvas.width/4, self.canvas.height - self.canvas.height/4, 10, self.context),
-                       new city(self.canvas.width - self.canvas.width/3, self.canvas.height/4 , 5, self.context)]
+      self.cityList = [new city(self.canvas.width/4, self.canvas.height/4, 20, self.context),
+                       new city(self.canvas.width - self.canvas.width/4, self.canvas.height - self.canvas.height/4, 25, self.context),
+                       new city(self.canvas.width - self.canvas.width/3, self.canvas.height/4 , 10, self.context)]
       // Keep a global reference.
       for (var l = 0; l < self.cityList.length; l++){
         for (var g =0; g< self.cityList[l].agents.length; g++){
@@ -440,9 +440,54 @@ epidemicCanvas = function(nameVal)
     var playPauseButton = $("#epidemic-startbutton");
     var resetButton = $("#epidemic-resetbutton");
 
+    var infectivitySlider = $("#infectivity-slider");
+    var infectiousTimeSlider = $("#infectious-time-slider");
+    var travelSlider = $("#travel-slider");
+
     if (playPauseButton != null){
       playPauseButton.unbind();
       resetButton.unbind();
+
+      travelSlider.unbind();
+      infectiousTimeSlider.unbind();
+      infectivitySlider.unbind();
+
+     $(function() {
+        infectivitySlider.slider({
+          range: "min",
+          value:50,
+          min: 0,
+          max: 100,
+          slide: function( event, ui ) {
+            infectProb = ui.value/100;
+          }
+        });
+      });
+
+    $(function() {
+       infectiousTimeSlider.slider({
+         range: "min",
+         value:50,
+         min: 1,
+         max: 100,
+         slide: function( event, ui ) {
+           p_ir = (1-ui.value/100)*0.01;
+         }
+       });
+     });
+
+    $(function() {
+       travelSlider.slider({
+         range: "min",
+         value:20,
+         min: 0,
+         max: 40,
+         slide: function( event, ui ) {
+           travelProbability = (ui.value/40)*0.02;
+         }
+       });
+     });
+
 
       playPauseButton.click(function(){
         self.isPaused = !self.isPaused;

@@ -16,9 +16,23 @@
         <div class="col-sm-10">
           <canvas id="epidemicCanvas" width="1px" height="400px" style="border:2px solid #000000;"></canvas>
           <div class="row canvas-control-div">
-            <div class="col-sm-10">
+            <div class="col-sm-4">
               <a href="javascript:void(0)" id="epidemic-startbutton" class="btn btn-sm btn-default">Play</a>
               <a href="javascript:void(0)" id="epidemic-resetbutton" class="btn btn-sm btn-default">Reset</a>
+            </div>
+            <div class="col-sm-4">
+              <div class="row">
+                <p>Infectivity:</p>
+                <div id="infectivity-slider"></div>
+              </div>
+              <div class="row">
+                <p>Infectious Duration:</p>
+                <div id="infectious-time-slider"></div>
+              </div>
+              <div class="row">
+                <p>Travel Propensity:</p>
+                <div id="travel-slider"></div>
+              </div>
             </div>
           </div>
         </div>
