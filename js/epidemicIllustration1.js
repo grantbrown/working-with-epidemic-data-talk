@@ -11,15 +11,15 @@ function agent(agentx, agenty, agentdx, agentdy, status, radius, context, city){
   self.y = agenty;
   self.dx = agentdx;
   self.dy = agentdy;
+  self.originalStatus = status;
   self.status = status;
   self.context = context;
   self.radius = radius;
   self.isTraveling = false;
   self.city = city;
 
-
   self.getCityDist = function(){
-    return(Math.sqrt(Math.pow(self.city.x - self.x, 2) + Math.pow(self.city.y - self.y,2)));
+    return((Math.pow(self.city.x - self.x, 2) + Math.pow(self.city.y - self.y,2)));
   }
 
   self.setNewDestination = function()
@@ -27,7 +27,7 @@ function agent(agentx, agenty, agentdx, agentdy, status, radius, context, city){
     var newx = self.city.randCoord() + self.city.x;
     var newy = self.city.randCoord() + self.city.y;
     var newVec = [(newx - self.x), (newy - self.y)]
-    var norm = Math.sqrt(Math.pow(newVec[0], 2) + Math.pow(newVec[1], 2))
+    var norm = Math.abs(newVec[0]) + Math.abs(newVec[1])
     self.dx = newVec[0]/norm*agentSpeed;
     self.dy = newVec[1]/norm*agentSpeed;
   }
@@ -51,15 +51,14 @@ function agent(agentx, agenty, agentdx, agentdy, status, radius, context, city){
     self.context.arc(self.x, self.y, self.radius, 0, 2 * Math.PI, false);
     self.context.fillStyle = self.getFillStyle();
     self.context.fill();
-    self.context.lineWidth = 3;
-    self.context.strokeStyle = self.getStrokeStyle();
+    //self.context.strokeStyle = self.getStrokeStyle();
     self.context.stroke();
   }
 
   self.move = function(){
     self.x += self.dx;
     self.y += self.dy;
-    if (self.getCityDist() > self.city.cityRadius || (Math.random() < agentChangeDirFrac))
+    if (self.getCityDist() > self.city.cityRadiusSq || (Math.random() < agentChangeDirFrac))
     {
         self.setNewDestination();
     }
@@ -76,6 +75,7 @@ function city(cityx,cityy,nodes, context){
     self.agents = [];
     self.context = context;
     self.cityRadius = Math.sqrt(self.numAgents)*nodeRadius*nodeRadius;
+    self.cityRadiusSq = self.cityRadius*self.cityRadius;
 
     self.teleport = function(){
       for (l = 0; l<self.agents.length; l++){
@@ -116,6 +116,13 @@ function city(cityx,cityy,nodes, context){
         self.agents[z].context = self.context;
       }
     }
+
+    self.resetSimulation = function(){
+      for (h = 0; h < self.agents.length; h++){
+          self.agents[h].status = self.agents[h].originalStatus;
+      }
+      self.teleport();
+    }
 }
 
 
@@ -125,12 +132,14 @@ epidemicCanvas = function(nameVal)
   self.name = nameVal;
   canvasIsActive = true;
   self.hasInit = false;
-  self.isPaused = false;
+  self.isPaused = true;
+  self.interval = null;
 
   self.buildCanvas = function(){
     self.canvas = document.getElementById('epidemicCanvas');
     if (self.canvas != null){
       self.context = self.canvas.getContext('2d');
+      self.context.lineWidth = 1;
       self.initialize();
     }
     self.resize();
@@ -179,12 +188,47 @@ epidemicCanvas = function(nameVal)
       self.cityList = [new city(self.canvas.width/4, self.canvas.height/4, 10, self.context),
                        new city(self.canvas.width - self.canvas.width/4, self.canvas.height - self.canvas.height/4, 10, self.context),
                        new city(self.canvas.width - self.canvas.width/3, self.canvas.height/4 , 5, self.context)]
-
-      setInterval(function(){
-        self.moveAndPlotAgents();
-      }, 10);
     }
   }
+
+  self.resetSimulation = function(){
+    for (h = 0; h < self.cityList.length; h++){
+          self.cityList[h].resetSimulation();
+    }
+  }
+
+  self.playPause = function(){
+    if (self.interval == null){
+          self.interval = setInterval(function(){
+          self.moveAndPlotAgents();
+      }, 10)
+    }
+    else{
+      clearInterval(self.interval);
+      self.interval = null;
+    }
+  }
+
+  self.wireUpControls = function(){
+    var playPauseButton = $("#epidemic-startbutton");
+    var resetButton = $("#epidemic-resetbutton");
+
+    if (playPauseButton != null){
+      playPauseButton.unbind();
+      resetButton.unbind();
+
+      playPauseButton.click(function(){
+        self.isPaused = !self.isPaused;
+        self.playPause();
+        if (self.isPaused){playPauseButton.text("Play");}
+        else {playPauseButton.text("Pause");}
+      });
+      resetButton.click(function(){
+        self.resetSimulation();
+      });
+    }
+  }
+
   self.buildCanvas();
 }
 
@@ -193,4 +237,5 @@ var epidemicCanvasInstance = new epidemicCanvas("MainCanvas");
 var activateCanvas = function(){
   console.log("Activate Canvas");
   epidemicCanvasInstance.buildCanvas();
+  epidemicCanvasInstance.wireUpControls();
 }
