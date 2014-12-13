@@ -311,7 +311,8 @@ if (typeof jQuery === 'undefined') {
     this.interval    =
     this.$active     =
     this.$items      = null
-
+    // hack
+    this.options.keyboard = false;
     this.options.keyboard && this.$element.on('keydown.bs.carousel', $.proxy(this.keydown, this))
 
     this.options.pause == 'hover' && !('ontouchstart' in document.documentElement) && this.$element
