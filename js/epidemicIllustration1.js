@@ -1,9 +1,27 @@
 
 
 var nodeRadius = 5;
-var agentSpeed = 4;
-var agentChangeDirFrac = 0.2;
+var agentSpeed = 5;
+var agentChangeDirFrac = 0.1;
 var canvasIsActive = false;
+var collisionFrames = 5;
+var p_ei = 0.05;
+var p_ir = 0.005;
+var infectProb = 0.5;
+var travelProbability = 0.01;
+
+function getMousePos(canvas, evt) {
+      var rect = canvas.getBoundingClientRect();
+      return {
+        x: evt.clientX - rect.left,
+        y: evt.clientY - rect.top
+      };
+    }
+
+function absDist(a,b){
+  return(Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y)));
+}
+
 
 function agent(agentx, agenty, agentdx, agentdy, status, radius, context, city){
   var self = this;
@@ -17,6 +35,13 @@ function agent(agentx, agenty, agentdx, agentdy, status, radius, context, city){
   self.radius = radius;
   self.isTraveling = false;
   self.city = city;
+
+  self.infect = function(){
+    if (self.status == 1){
+      self.status = 2;
+      self.draw();
+    }
+  }
 
   self.getCityDist = function(){
     return((Math.pow(self.city.x - self.x, 2) + Math.pow(self.city.y - self.y,2)));
@@ -33,7 +58,7 @@ function agent(agentx, agenty, agentdx, agentdy, status, radius, context, city){
   }
 
   self.getFillStyle = function(){
-    if (self.status == 1){return('green')}
+    if (self.status == 1){return('blue')}
     if (self.status == 2){return('yellow')}
     if (self.status == 3){return('red')}
     if (self.status == 4){return('grey')}
@@ -78,7 +103,7 @@ function city(cityx,cityy,nodes, context){
     self.cityRadiusSq = self.cityRadius*self.cityRadius;
 
     self.teleport = function(){
-      for (l = 0; l<self.agents.length; l++){
+      for (var l = 0; l<self.agents.length; l++){
         self.agents[l].x = self.randCoord() + self.x;
         self.agents[l].y = self.randCoord() + self.y;
       }
@@ -88,7 +113,7 @@ function city(cityx,cityy,nodes, context){
       return((Math.random() - 0.5)*self.cityRadius);
     }
 
-    for (i = 0; i < self.numAgents; i++){
+    for (var i = 0; i < self.numAgents; i++){
       var newX = self.randCoord() + self.x;
       var newY = self.randCoord() + self.y;
       var newAg = new agent(newX, newY,
@@ -97,14 +122,14 @@ function city(cityx,cityy,nodes, context){
     }
 
     self.moveAgents = function(){
-      for (i = 0; i < self.numAgents; i++)
+      for (var i = 0; i < self.numAgents; i++)
       {
         self.agents[i].move();
       }
     }
 
     self.drawAgents = function(){
-      for (i = 0; i < self.numAgents; i++)
+      for (var i = 0; i < self.numAgents; i++)
       {
         self.agents[i].draw();
       }
@@ -112,16 +137,15 @@ function city(cityx,cityy,nodes, context){
 
     self.updateContext = function(context){
       self.context = context;
-      for (z = 0; z < self.agents.length; z++){
+      for (var z = 0; z < self.agents.length; z++){
         self.agents[z].context = self.context;
       }
     }
 
     self.resetSimulation = function(){
-      for (h = 0; h < self.agents.length; h++){
+      for (var h = 0; h < self.agents.length; h++){
           self.agents[h].status = self.agents[h].originalStatus;
       }
-      self.teleport();
     }
 }
 
@@ -135,17 +159,74 @@ epidemicCanvas = function(nameVal)
   self.isPaused = true;
   self.interval = null;
   self.agents = [];
+  self.quadTree = null;
+  self.collisionCounter = 0;
 
   self.buildCanvas = function(){
     self.canvas = document.getElementById('epidemicCanvas');
     if (self.canvas != null){
       self.context = self.canvas.getContext('2d');
       self.context.lineWidth = 1;
+      self.context.font = '24pt Calibri';
+      self.context.textAlign = 'left';
       self.initialize();
+
+      self.canvas.addEventListener('click', function(evt) {
+          self.infectSomebody(evt);
+      }, false);
     }
     self.resize();
+    self.wireUpQuadTree();
   }
 
+  self.legend = function(){
+    var radius = 20;
+    var xpad = 25;
+    var x;
+    var y;
+
+    self.context.font = '24pt Calibri';
+    x = radius + xpad;
+    y = self.canvas.height - radius - xpad;
+    self.context.beginPath();
+    self.context.arc(x,y, radius, 0, 2 * Math.PI, false);
+    self.context.fillStyle = "blue";
+    self.context.fill();
+    self.context.stroke();
+    self.context.fillStyle = "black";
+
+    self.context.fillText("S",x - 0.5*radius,y + 0.5*radius)
+
+    x = 2*radius + 2*xpad;
+    self.context.beginPath();
+    self.context.arc(x,y, radius, 0, 2 * Math.PI, false);
+    self.context.fillStyle = "yellow";
+    self.context.fill();
+    self.context.stroke();
+    self.context.fillStyle = "black";
+    self.context.fillText("E",x - 0.5*radius,y + 0.5*radius)
+
+    x = 3*radius + 3*xpad;
+    self.context.beginPath();
+    self.context.arc(x,y,radius, 0, 2 * Math.PI, false);
+    self.context.fillStyle = "red";
+    self.context.fill();
+    self.context.stroke();
+    self.context.fillStyle = "black";
+    self.context.fillText("I",x - 0.5*radius,y + 0.5*radius)
+
+    x = 4*radius + 4*xpad;
+    self.context.beginPath();
+    self.context.arc(x,y, radius, 0, 2 * Math.PI, false);
+    self.context.fillStyle = "grey";
+    self.context.fill();
+    self.context.stroke();
+    self.context.fillStyle = "black";
+    self.context.fillText("R",x - 0.5*radius,y + 0.5*radius)
+
+
+
+  }
 
   self.resize = function(){
     console.log("resizing");
@@ -162,25 +243,126 @@ epidemicCanvas = function(nameVal)
       self.cityList[1].y = self.canvas.height - self.canvas.height/4;
       self.cityList[2].x = self.canvas.width - self.canvas.width/3;
       self.cityList[2].y = self.canvas.height/4;
-      for (k = 0; k < self.cityList.length; k++){self.cityList[k].teleport();}
+      for (var k = 0; k < self.cityList.length; k++){self.cityList[k].teleport();}
+    }
+  }
+
+  self.updateCities = function(){
+    var ag;
+    var totalAgents = self.agents.length;
+    var cumProb ;
+    var cityDraw;
+    for (var k = 0; k < totalAgents; k++){
+      ag = self.agents[k];
+      if (Math.random() < travelProbability){
+          cumProb =0;
+          // Traveling;
+          cityDraw = Math.random();
+          for (var j = 0; j < self.cityList.length; j++){
+              cumProb += self.cityList[j].numAgents;
+              if (cityDraw < cumProb/totalAgents){
+                ag.city = self.cityList[j];
+                ag.isTraveling = true;
+                break;
+              }
+          }
+      }
     }
   }
 
   self.moveAndPlotAgents = function(){
-    for (j = 0; j < self.agents.length; j++)
+    for (var j = 0; j < self.agents.length; j++)
     {
       self.agents[j].move();
     }
     self.context.clearRect(0, 0, self.canvas.width, self.canvas.height);
-    for (k = 0; k < self.agents.length; k++)
+    for (var k = 0; k < self.agents.length; k++)
     {
       self.agents[k].draw();
     }
+    self.legend();
+    self.collisionCounter +=  1;
 
+    if (self.collisionCounter > collisionFrames)
+    {
+       self.collisionCounter = 0;
+       self.resolveCollisions();
+       self.updateInfections();
+       self.updateCities();
+    }
   }
+
+  self.updateInfections = function(){
+    var ag;
+    for (var i = 0; i < self.agents.length ; i++){
+      ag = self.agents[i];
+      if (ag.status == 2 && (Math.random() < p_ei)){
+        ag.status = 3;
+      }
+      else if (ag.status == 3 && Math.random() < p_ir){
+        ag.status =4;
+      }
+    }
+  }
+
+  self.wireUpQuadTree = function(){
+    delete self.quadTree;
+    if (self.canvas != null){
+      var pointQuad = true;
+      var bounds = {
+            x:0,
+            y:0,
+            width:self.canvas.width,
+            height:self.canvas.height
+      }
+      self.quadTree = new QuadTree(bounds, pointQuad);
+      self.quadTree.insert(self.agents);
+    }
+  }
+
+  self.updateQuadTree = function(){
+    self.quadTree.clear();
+    self.quadTree.insert(self.agents);
+  }
+
+  self.resolveCollisions = function(){
+    self.updateQuadTree();
+    var a;
+    var items;
+    var item;
+    var len;
+    var randomDraw;
+    for (var j = 0; j < self.agents.length; j++)
+    {
+      a = self.agents[j];
+      items = self.quadTree.retrieve(a);
+      len = items.length;
+      for (var k = 0; k < len; k++)
+      {
+          item = items[k];
+          if (a == item){continue;}
+          if ((a.status == 3 || item.status == 3) && Math.abs(a.x - item.x) < a.radius && Math.abs(a.y-item.y) < a.radius)
+          {
+              randomDraw = Math.random();
+              if (randomDraw < infectProb)
+              {
+                  if (a.status == 3 && item.status == 1)
+                  {
+                      item.status = 2;
+                  }
+                  else if (a.status == 1 && item.status == 3)
+                  {
+                      a.status = 2;
+                  }
+              }
+          }
+      }
+    }
+  }
+
   self.initialize = function(){
     if (self.hasInit){
-      for (k = 0; k < self.cityList.length; k++){
+      for (var k = 0; k < self.cityList.length; k++){
         self.cityList[k].updateContext(self.context);
       }
     }
@@ -190,19 +372,27 @@ epidemicCanvas = function(nameVal)
                        new city(self.canvas.width - self.canvas.width/4, self.canvas.height - self.canvas.height/4, 10, self.context),
                        new city(self.canvas.width - self.canvas.width/3, self.canvas.height/4 , 5, self.context)]
       // Keep a global reference.
-      for (l = 0; l < self.cityList.length; l++){
-        for (g =0; g< self.cityList[l].agents.length; g++){
+      for (var l = 0; l < self.cityList.length; l++){
+        for (var g =0; g< self.cityList[l].agents.length; g++){
           self.agents.push(self.cityList[l].agents[g]);
         }
       }
+
+      // Wire up the quad tree for collision
+      self.wireUpQuadTree();
     }
+
   }
 
   self.resetSimulation = function(){
-    for (h = 0; h < self.cityList.length; h++){
-          self.cityList[h].resetSimulation();
+    var ag;
+      for (var l = 0; l<self.agents.length; l++){
+        ag = self.agents[l];
+        ag.x = ag.city.x + ag.city.randCoord();
+        ag.y = ag.city.y + ag.city.randCoord();
+        ag.status = 1;
+      }
     }
-  }
 
   self.playPause = function(){
     if (self.interval == null){
@@ -213,6 +403,36 @@ epidemicCanvas = function(nameVal)
     else{
       clearInterval(self.interval);
       self.interval = null;
+    }
+  }
+
+  self.infectSomebody = function(evt){
+    if (self.canvas != null){
+       self.updateQuadTree();
+       var rect = self.canvas.getBoundingClientRect();
+       var clickx = evt.clientX - rect.left;
+       var clicky = evt.clientY - rect.top;
+       var click = {x:clickx, y:clicky};
+
+       console.log("Trying to infect somebody at (" + clickx + ", " + clicky + ")");
+       var items = self.quadTree.retrieve({x:clickx, y:clicky});
+       console.log(items.length + " items found");
+       if (items.length == 1){
+         items[0].infect();
+       }
+       else if (items.length > 1){
+         var minDist = 1000000;
+         var minItem = items[0];
+         var dist;
+         for (var u = 0; u < items.length; u++){
+           var dist = absDist(items[u], click);
+           if (dist <= minDist){
+             minDist = dist;
+             minItem = items[u];
+           }
+         }
+         minItem.infect();
+       }
     }
   }
 
@@ -244,4 +464,5 @@ var activateCanvas = function(){
   console.log("Activate Canvas");
   epidemicCanvasInstance.buildCanvas();
   epidemicCanvasInstance.wireUpControls();
+  epidemicCanvasInstance.moveAndPlotAgents();
 }
