@@ -13,6 +13,17 @@
   margin-bottom:60px;
 }
 
+.slide-title {
+    margin-bottom:20px;
+    font-size: 5em; /* 40px/16=2.5em */
+}
+.slide-subtitle {
+    font-size: 3em; /* 40px/16=2.5em */
+}
+.slide-content {
+    font-size: 3em; /* 40px/16=2.5em */
+}
+
 .canvas-control-div{
   margin-bottom:50px;
 }
@@ -25,3 +36,11 @@
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
   }
+
+.slide-title1{
+  float:top;
+}
+
+.presentation-ul{
+  text-align: left;
+}

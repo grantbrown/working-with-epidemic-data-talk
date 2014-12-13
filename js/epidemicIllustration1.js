@@ -1,12 +1,12 @@
 
 
-var nodeRadius = 5;
+var nodeRadius = 10;
 var agentSpeed = 10;
 var agentChangeDirFrac = 0.1;
 var canvasIsActive = false;
 var collisionFrames = 1;
 var p_ei = 0.08;
-var p_ir = 0.005;
+var p_ir = 0.05;
 var infectProb = 0.5;
 var travelProbability = 0.01;
 
@@ -99,7 +99,7 @@ function city(cityx,cityy,nodes, context){
     self.numAgents = nodes;
     self.agents = [];
     self.context = context;
-    self.cityRadius = Math.sqrt(self.numAgents)*nodeRadius*nodeRadius;
+    self.cityRadius = Math.sqrt(self.numAgents*nodeRadius)*nodeRadius;
     self.cityRadiusSq = self.cityRadius*self.cityRadius;
 
     self.teleport = function(){
@@ -231,7 +231,7 @@ epidemicCanvas = function(nameVal)
   self.resize = function(){
     console.log("resizing");
     if (self.canvas != null){
-      var height = $(document).height() - 200;
+      var height = $(document).height() - 400;
       var parent = $("#epidemicCanvas").parent();
       self.canvas.width = parent.width();
       self.canvas.height = height;
@@ -271,24 +271,26 @@ epidemicCanvas = function(nameVal)
   }
 
   self.moveAndPlotAgents = function(){
-    for (var j = 0; j < self.agents.length; j++)
-    {
-      self.agents[j].move();
-    }
-    self.context.clearRect(0, 0, self.canvas.width, self.canvas.height);
-    for (var k = 0; k < self.agents.length; k++)
-    {
-      self.agents[k].draw();
-    }
-    self.legend();
-    self.collisionCounter +=  1;
+    if (self.canvas != null){
+      for (var j = 0; j < self.agents.length; j++)
+      {
+        self.agents[j].move();
+      }
+      self.context.clearRect(0, 0, self.canvas.width, self.canvas.height);
+      for (var k = 0; k < self.agents.length; k++)
+      {
+        self.agents[k].draw();
+      }
+      self.legend();
+      self.collisionCounter +=  1;
 
-    if (self.collisionCounter > collisionFrames)
-    {
-       self.collisionCounter = 0;
-       self.resolveCollisions();
-       self.updateInfections();
-       self.updateCities();
+      if (self.collisionCounter > collisionFrames)
+      {
+         self.collisionCounter = 0;
+         self.resolveCollisions();
+         self.updateInfections();
+         self.updateCities();
+      }
     }
   }
 
@@ -392,6 +394,7 @@ epidemicCanvas = function(nameVal)
         ag.y = ag.city.y + ag.city.randCoord();
         ag.status = 1;
       }
+      self.moveAndPlotAgents();
     }
 
   self.playPause = function(){
@@ -448,9 +451,9 @@ epidemicCanvas = function(nameVal)
       playPauseButton.unbind();
       resetButton.unbind();
 
-      travelSlider.unbind();
-      infectiousTimeSlider.unbind();
-      infectivitySlider.unbind();
+      //travelSlider.unbind();
+      //infectiousTimeSlider.unbind();
+      //infectivitySlider.unbind();
 
      $(function() {
         infectivitySlider.slider({
@@ -471,7 +474,7 @@ epidemicCanvas = function(nameVal)
          min: 1,
          max: 100,
          slide: function( event, ui ) {
-           p_ir = (1-ui.value/100)*0.01;
+           p_ir = (1-ui.value/100)*0.1;
          }
        });
      });
