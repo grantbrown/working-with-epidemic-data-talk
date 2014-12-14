@@ -159,8 +159,10 @@ epidemicCanvas = function(nameVal)
   self.isPaused = true;
   self.interval = null;
   self.agents = [];
+  self.infectionEvents = [];
   self.quadTree = null;
   self.collisionCounter = 0;
+  self.timeElapsed = 0;
 
   self.buildCanvas = function(){
     self.canvas = document.getElementById('epidemicCanvas');
@@ -224,8 +226,6 @@ epidemicCanvas = function(nameVal)
     self.context.fillStyle = "black";
     self.context.fillText("R",x - 0.5*radius,y + 0.5*radius)
 
-
-
   }
 
   self.resize = function(){
@@ -271,6 +271,7 @@ epidemicCanvas = function(nameVal)
   }
 
   self.moveAndPlotAgents = function(){
+    self.timeElapsed += 1;
     if (self.canvas != null){
       for (var j = 0; j < self.agents.length; j++)
       {
@@ -294,12 +295,40 @@ epidemicCanvas = function(nameVal)
     }
   }
 
+  self.getInfectionSummaryData = function(){
+    var outEvents = [];
+    var outArray = [];
+    var i;
+    for (i = 0; i<self.infectionEvents.length; i++){
+      outEvents.push(self.infectionEvents[i] - self.infectionEvents[0]);
+    }
+    var maxTime = outEvents[outEvents.length-1];
+
+    // Remove duplicate times
+    var cumulativeCases = 0;
+    var previousTpt = -1;
+    var tmp;
+    for (i = 0; i < outEvents.length; i++){
+      cumulativeCases += 1;
+      if (previousTpt == outEvents[i]){
+        tmp=outArray[outArray.length - 1];
+        tmp[1] = cumulativeCases;
+      }
+      else{
+        outArray.push([outEvents[i], cumulativeCases]);
+      }
+      previousTpt = outEvents[i];
+    }
+    return(outArray);
+  }
+
   self.updateInfections = function(){
     var ag;
     for (var i = 0; i < self.agents.length ; i++){
       ag = self.agents[i];
       if (ag.status == 2 && (Math.random() < p_ei)){
         ag.status = 3;
+        self.infectionEvents.push(self.timeElapsed);
       }
       else if (ag.status == 3 && Math.random() < p_ir){
         ag.status =4;
@@ -387,6 +416,8 @@ epidemicCanvas = function(nameVal)
   }
 
   self.resetSimulation = function(){
+    self.infectionEvents = [];
+    self.timeElapsed = 0;
     var ag;
       for (var l = 0; l<self.agents.length; l++){
         ag = self.agents[l];
@@ -442,7 +473,7 @@ epidemicCanvas = function(nameVal)
   self.wireUpControls = function(){
     var playPauseButton = $("#epidemic-startbutton");
     var resetButton = $("#epidemic-resetbutton");
-
+    var plotButton = $("#epidemic-plotbutton");
     var infectivitySlider = $("#infectivity-slider");
     var infectiousTimeSlider = $("#infectious-time-slider");
     var travelSlider = $("#travel-slider");
@@ -450,6 +481,8 @@ epidemicCanvas = function(nameVal)
     if (playPauseButton != null){
       playPauseButton.unbind();
       resetButton.unbind();
+      plotButton.unbind();
+
 
       //travelSlider.unbind();
       //infectiousTimeSlider.unbind();
@@ -500,6 +533,40 @@ epidemicCanvas = function(nameVal)
       });
       resetButton.click(function(){
         self.resetSimulation();
+      });
+      plotButton.click(function(){
+        if (self.infectionEvents.length == 0){
+          $("#modaltextmessage").text("Not enough simulated data - infect a few agents by clicking on them, then run the simulation.");
+          $("#modal-div").modal({ keyboard: true, show: true });
+        }
+        else{
+          var rows = self.getInfectionSummaryData();
+          var data = new google.visualization.DataTable();
+          data.addColumn("number", "X");
+          data.addColumn("number", "Y");
+          data.addRows(rows);
+           var options = {
+            width: $(window).width()*0.6,
+            height: $(window).height()*0.6,
+            pointShape:1,
+            pointSize:10,
+            legend: 'none',
+            hAxis: {
+              title: 'Time Units'
+            },
+            vAxis: {
+              title: 'Cumulative Infections'
+            }
+          };
+
+          var chart = new google.visualization.LineChart(
+            document.getElementById('main-modal-body'));
+
+          chart.draw(data, options);
+          $("#modaltextmessage").text("Successfully generated plot.");
+          $("#modal-div").modal({ keyboard: true, show: true });
+          $("#main-modal-body").width("100%");
+        }
       });
     }
   }

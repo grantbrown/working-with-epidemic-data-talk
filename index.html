@@ -24,6 +24,7 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="msapplication-TileImage" content="./content/favico/mstile-144x144.png">
 
+
     <title>Recent Developments in Spatial Epidemic Modeling</title>
 
     <!-- Bootstrap core CSS -->
@@ -46,12 +47,26 @@
   <body>
   <div class="site-wrapper container">
     <div class="site-wrapper-inner">
+      <div id="modal-div" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="plotModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content row">
+                  <div class="modal-header">
+                      <h3>Summary Plot</h3>
+                  </div>
+                  <div id="main-modal-body" class="modal-body">
+                      <p id="modaltextmessage">
+
+                      </p>
+                  </div>
+              </div>
+          </div>
+      </div>
         <div class="cover-container">
           <div class="navbar navbar-fixed-top masthead clearfix">
             <div class="inner">
               <div class = "row">
                 <div class = "col-sm-2">
-                  <h3 class="masthead-brand">Cover</h3>
+                  <h3 class="masthead-brand">Working With Epidemic Data</h3>
                 </div>
                 <div class="col-sm-3">
                   <ol id="carouselIndicatorsList" class="carousel-indicators"></ol>
@@ -106,6 +121,7 @@
     <script src="./js/handleCarouselChanges.js"></script>
     <script src="./js/epidemicIllustration1.js"></script>
     <script src="./js/ExamplesByMesh/JavaScript/QuadTree/src/QuadTree.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart']}]}"></script>
     <script>
 
       var contentHolder = $("#contentholder");

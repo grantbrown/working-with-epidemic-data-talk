@@ -44,3 +44,12 @@
 .presentation-ul{
   text-align: left;
 }
+
+.modal-content {
+  background-color: #334455;
+}
+
+.modal-dialog {
+    width: 60%;
+    height:40%;
+}
