@@ -74,8 +74,11 @@
                 <div class = "col-sm-6">
                   <nav>
                     <ul class="nav masthead-nav">
-                      <li class="active" id ="Section1LinkItem"><a href="#Section1/">Section1</a></li>
-                      <li id="Section2LinkItem"><a href="#Section2/">Section2</a></li>
+                      <li class="active" id ="Section1LinkItem"><a href="#Section1/">Introduction</a></li>
+                      <li id="Section2LinkItem"><a href="#Section2/">Heirarchical Models</a></li>
+                      <li id="Section3LinkItem"><a href="#Section3/">New Developments</a></li>
+                      <li id="Section4LinkItem"><a href="#Section4/">Case Studies</a></li>
+                      <li id="Section5LinkItem"><a href="#Section5/">Conclusion</a></li>
                     </ul>
                   </nav>
                 </div>
@@ -120,8 +123,16 @@
     <script src="./js/normalizeCarouselHeight.js"></script>
     <script src="./js/handleCarouselChanges.js"></script>
     <script src="./js/epidemicIllustration1.js"></script>
+    <script src="./js/choroplethData.js"></script>
+    <script src="./js/epidemicIllustration2.js"></script>
     <script src="./js/ExamplesByMesh/JavaScript/QuadTree/src/QuadTree.js"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart']}]}"></script>
+    <script src="./js/d3.v3.min.js"></script>
+    <script src="./js/topojson.v1.min.js"></script>
+    <script src='./js/handlebars.min.js' type='text/javascript'></script>
+    <script src="./js/angular.min.js"></script>
+    <script src="./js/datamaps.world.min.js"></script>
+
     <script>
 
       var contentHolder = $("#contentholder");
@@ -173,6 +184,7 @@
             generateCarouselIndicators();
             $("#carousel-generic").on("slid.bs.carousel", function() {
               activateCanvas();
+              activateDatamap();
             });
           });
         }
@@ -190,6 +202,7 @@
               generateCarouselIndicators();
               $("#carousel-generic").on("slid.bs.carousel", function() {
                 activateCanvas();
+                activateDatamap();
               });
             });
         }

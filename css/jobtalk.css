@@ -35,7 +35,7 @@
     -ms-transform: translateY(-50%);
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
-  }
+}
 
 .slide-title1{
   float:top;
@@ -52,4 +52,9 @@
 .modal-dialog {
     width: 60%;
     height:40%;
+}
+
+svg.datamap{
+	height:400px;
+  background:rgb(28,107,160);
 }

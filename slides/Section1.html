@@ -51,11 +51,62 @@
             </h3>
           </div>
           <div class="col-sm-5">
-            <div id="ft-chart-image" style="background: url(http://chart.googleapis.com/chart?cht=ls&amp;chs=520x171&amp;chd=s:EDDDDEEEFFGHHHIIJKLMLLLKLLMLMORTTTSPNLJIHHMKKKKJKKJI,HHHHHHIKOSVXbehnkfZUPOMLLMMKKKKLLLKKJIHHGGGGGGFFFEEE,EEEEEEEFFGGHHIIJJJKKJLLMOQQPRTUVWUQOLKJIHGGFFFFFEEED,DDDDDDDEEFGHIJJJJKKKKLLLNPQONOONOPOOOMLKKKJJJJIIHHGF,FFFFFFGGHIJKLNNNNOQRUYcjsv460oeZXVTSQPOMKJIIHGGGGFFF,FFFFFFFFGGHHHIHIIIJJJLMSZcaZWTQOMLKKJKKKJIIIHHHGGGFF,FGFEEEEEFGHGGHHHHHHIKMR_____________________________&amp;chco=D2E7FD,D2E7FD,C1DEFC,A6D0FB,B7D8FA,8DC3FB,3B66FF&amp;chls=1|1|1|1.2|1.4|1.6|2&amp;chf=bg,s,FFFFFF00) -2px 0px no-repeat;"></div>
+            <br/>
+          <iframe width="301" height="300" src="http://www.google.org/flutrends/embed/en_us/us/#US" frameborder="0"></iframe>
           </div>
         </div>
       </div>
     </div>
+
+    <div class="item">
+      <div class="inner cover">
+        <div class = "row">
+          <h1 class="cover-heading slide-title">Important Challenges in Epidemic Data Analysis</h1>
+        </div>
+        <div class = "row">
+          <div class="col-sm-1"></div>
+          <div class = "col-sm-6 presentation-ul">
+            <h3 class="slide-content"> Beyond the inherent complexity, the infectious disease landscape is changing:
+              <ul>
+                <li>Societies are increasingly connected</li>
+                <li>Changes in farming scale and technique present unique challenges</li>
+                <li>Climate change affects disease spread in a number of ways, both directly and indirectly</li>
+              </ul>
+            </h3>
+          </div>
+          <div class="col-sm-5">
+            <br/>
+            <img src="./content/images/CHIKV.jpg" alt ="Chikungunya" width="100%"></img>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="inner cover">
+        <div class = "row">
+          <h1 class="cover-heading slide-title">Potential Impact</h1>
+        </div>
+        <div class = "row">
+          <div class="col-sm-1"></div>
+          <div class = "col-sm-10 presentation-ul">
+            <h3 class="slide-content">
+              <ul>
+                <li><strong>Quantify pathogen behaviors:</strong> does a particular epidemic resemble well understood previous examples?</li>
+                <li><strong>Detect anomalies:</strong> has a pathogen become more dangerous? Was a particular community resistant to disease spread?</li>
+                <li><strong>Prediction:</strong> what scale of intervention is likely needed?</li>
+                <li><strong>Program evaluation:</strong> are public health interventions having an effect?</li>
+                <li><strong>Intervention targeting:</strong> is there a particular location where efforts will be most effective?</li>
+              </ul>
+            </h3>
+          </div>
+          <div class="col-sm-1">
+            <br/>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="item">
       <div class="row">
         <div class = "col-sm-1"></div>
@@ -90,8 +141,24 @@
     </div>
     <div class="item">
       <div class="inner cover">
-        <h1 class="cover-heading slide-title">Section 1 Slide 3.</h1>
-        <p class="lead slide-content">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>
+        <h1 class="cover-heading slide-title">2014 Ebola Outbreak in West Africa.</h1>
+
+      <div id="africa-map-cotainer row">
+        <div class='container' id ="zoom_map_container" style="position: relative; max-width: 100%; height:100%">
+          <div class = "row">
+            <div class="col-sm-3">
+               <input id='zoom-map-slider' type='range' value="1" min="1" max="252" width="200"></input>
+               <span>Day: <span id ="zoom-map-day-counter"></span></span>
+            </div>
+            <div class="col-sm-1">  <button class="btn btn-mini btn-primary" id="zoom-map-play" type="button">Play</button></div>
+            <div class = "col-sm-6"></div>
+          </div>
+          <div class="row">
+            <div id='zoom_map' class='rChart datamaps col-sm-8 col-sm-offset-1' style="position: relative; max-width: 100%; height:100%"></div>
+            <div class="col-sm-3"></div>
+          </div>
+        </div>
+      </div>
       </div>
     </div>
   </div>
