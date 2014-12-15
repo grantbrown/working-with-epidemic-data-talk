@@ -58,3 +58,7 @@ svg.datamap{
 	height:400px;
   background:rgb(28,107,160);
 }
+
+.externalLink{
+  color: #337AB7;
+}
