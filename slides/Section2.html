@@ -102,29 +102,74 @@
         <h1 class="cover-heading slide-title">Modeling, Hierarchical Models, and Bayesian Inference</h1>
         <p class="lead slide-content">Building Heirarchical Models - Simple example</p>
         <div class="row">
-          <div class = "col-sm-6">
-
+          <div class = "col-sm-5">
+            <img src="./content/images/SimpleHM.png" alt ="Various Binomial Distributions" width="70%"></img>
           </div>
-          <div class = "col-sm-6 presentation-ul">
+          <div class = "col-sm-7 presentation-ul">
             <h3 class="slide-content">
               <ol>
-
+                <li>Consider a marketing study, where participants are asked whether they would buy several products
+                  of potential products which differ by size, price, and color.</li>
+                <li>As each person provides more than one answer, there is structure to this data.</li>
+                <li>This is a classic use of a subject specific "random effect"</li>
+                <li>What does the HM look like for this case?</li>
+                <li>What can go wrong if we don't account for this correlation?</li>
               </ol>
             </h3>
           </div>
+
         </div>
       </div>
     </div>
 
-
-
     <div class="item">
+      <!--<img src="..." alt="...">-->
       <div class="inner cover">
-        <h1 class="cover-heading">Section 2 Slide 2.</h1>
-        <p class="lead">Cover is a one-page template for building simple and beautiful home pages. </p>
-
+        <h1 class="cover-heading slide-title">SEIR Models</h1>
+        <p class="lead slide-content">General Structure</p>
+        <div class="row">
+          <div class = "col-sm-2"></div>
+          <div class = "col-sm-8 presentation-ul">
+            <h3 class="slide-content">
+              <ol>
+                <li><strong>Susceptible:</strong> capable of contracting an infection</li>
+                <li><strong>Exposed:</strong> infected, but not yet capable of spreading a disease</li>
+                <li><strong>Infectious:</strong> able to pass a disease on to others</li>
+                <li><strong>Removed:</strong> no longer infectious, either by recovery and subsequent immunity,
+                    or death</li>
+              </ol>
+            </h3>
+          </div>
+          <div class="col-sm-2"></div>
+        </div>
+        </div>
       </div>
+
+      <div class="item">
+        <!--<img src="..." alt="...">-->
+        <div class="inner cover">
+          <h1 class="cover-heading slide-title">SEIR Models</h1>
+          <p class="lead slide-content">Temporal Process Model</p>
+          <div class="row">
+            <div class = "col-sm-2"></div>
+            <div class = "col-sm-10 slide-content">
+              <p> Individuals are assumed to travel through the "compartments" according to binomial draws. This is known as
+              a chain binomial structure. Though not shown below, this process is indexed over space and time.</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class ="col-sm-2"></div>
+                <div class = "col-sm-8">
+                  <img src="./content/images/SimpleSEIR.png" alt ="A simplified look at the SEIR structure" width="60%"></img>
+                </div>
+              <div class = "col-sm2"></div>
+            </div>
+          </div>
+          </div>
+        </div>
     </div>
+
+
   </div>
   <!-- Controls -->
   <a class="left carousel-control" href="#carousel-generic" data-slide="prev">

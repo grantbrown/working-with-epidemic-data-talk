@@ -99,6 +99,33 @@ var runAfricaDataMap = function(){
       if (self.chartParams.legend){
         self.zoom.legend();
       }
+
+
+      var yoffs = 10;
+      var xoffs = 10;
+      var epiData = [
+        { "x": 130-xoffs, "y": 250-yoffs, "name":"GIN"},
+        { "x": 200-xoffs, "y": 305-yoffs, "name":"LBR"},
+        { "x": 165-xoffs, "y": 280-yoffs, "name":"SLE"},
+        { "x": 430-xoffs, "y": 250-yoffs, "name":"NGA"},
+        { "x": 100-xoffs, "y": 200-yoffs, "name":"SEN"},
+        { "x": 250-xoffs, "y": 200-yoffs, "name":"MLI"}];
+
+
+      var svgContainer = d3.select("svg");
+
+      var text = svgContainer.selectAll("text")
+                              .data(epiData)
+                              .enter()
+                           .append("text");
+      var textLabels = text
+                       .attr("x", function(d) { return d.x; })
+                       .attr("y", function(d) { return d.y; })
+                       .text( function (d) { return("("+ d.name + ")"); })
+                       .attr("font-family", "sans-serif")
+                       .attr("font-size", "20px")
+                       .attr("fill", "red");
+
     }
     else{
       self.zoom.draw();
@@ -148,28 +175,6 @@ var runAfricaDataMap = function(){
         counter.text(dayLabels[sliderVal]);
         self.zoom.updateChoropleth(alldata[sliderVal]);
 
-        epiData = [
-          { "x": 130, "y": 250, "name":"GIN"},
-          { "x": 200, "y": 305, "name":"LBR"},
-          { "x": 165, "y": 280, "name":"SLE"},
-          { "x": 430, "y": 250, "name":"NGA"},
-          { "x": 100, "y": 200, "name":"SEN"},
-        	{ "x": 250, "y": 200, "name":"MLI"}];
-
-
-        svgContainer = d3.select("svg");
-
-        text = svgContainer.selectAll("text")
-                                .data(epiData)
-                                .enter()
-                             .append("text");
-        textLabels = text
-                         .attr("x", function(d) { return d.x; })
-                         .attr("y", function(d) { return d.y; })
-                         .text( function (d) { return("("+ d.name + ")"); })
-                         .attr("font-family", "sans-serif")
-                         .attr("font-size", "20px")
-                         .attr("fill", "red");
 
         var txt = d3.select("svg").selectAll("text");
 
