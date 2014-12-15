@@ -4,15 +4,70 @@
     <div class="item active">
       <!--<img src="..." alt="...">-->
       <div class="inner cover">
-        <h1 class="cover-heading slide-title">Modeling, Heirarchical Models, and Bayesian Inference</h1>
-        <p class="lead">"...all models are wrong; the practical question is how wrong do they have to be to not be useful." - George Box (1987) </p>
-        <h3 class="slide-content">
-          <ul>
-            <li>All models are simplifications of reality, but we must be careful not to oversimplify.</li>
-          </ul>
-        </h3>
+        <h1 class="cover-heading slide-title">Modeling, Hierarchical Models, and Bayesian Inference</h1>
+        <p class="lead slide-content"><i>"...all models are wrong; the practical question is how wrong do they
+          have to be to not be useful." </i> - George Box (1987)</p>
+        <div class="row">
+          <div class = "col-sm-2"></div>
+          <div class = "col-sm-10 presentation-ul">
+            <h3 class="slide-content">
+              <ul>
+                <li>All models are simplifications of reality, but we must be careful not to oversimplify.</li>
+                <li>Hierarchical models allow us to break a difficult problem down into component parts.</li>
+                <li>The fundamental building block of hierarchical models is conditional probability,
+                  and appropriate probability distributions.</li>
+                <li>Bayesian inference is a particularly flexible tool for HM.</li>
+              </ul>
+            </h3>
+          </div>
+        </div>
       </div>
     </div>
+
+    <div class="item">
+      <!--<img src="..." alt="...">-->
+      <div class="inner cover">
+        <h1 class="cover-heading slide-title">Modeling, Hierarchical Models, and Bayesian Inference</h1>
+        <p class="lead slide-content">Probability Distributions</p>
+        <div class="row">
+          <div class = "col-sm-6">
+              <img src="./content/images/normalDist.png" alt ="Various Normal Distributions" width="70%"></img>
+          </div>
+          <div class = "col-sm-6 presentation-ul">
+            <h3 class="slide-content">
+              <ul>
+                <li>Probability distributions can have different interpretations, here we prefer to consider them
+                a way of quantifying uncertainty about unknown quantities.</li>
+                <li>Consider that probability distributions depend on parameters. We can think of such a
+                distribution as being "conditional" on some fixed value of those parameters.</li>
+              </ul>
+            </h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="item">
+      <!--<img src="..." alt="...">-->
+      <div class="inner cover">
+        <h1 class="cover-heading slide-title">Modeling, Hierarchical Models, and Bayesian Inference</h1>
+        <p class="lead slide-content">Probability Distributions</p>
+        <div class="row">
+          <div class = "col-sm-6">
+              <img src="./content/images/binomialDist.png" alt ="Various Binomial Distributions" width="70%"></img>
+          </div>
+          <div class = "col-sm-6 presentation-ul">
+            <h3 class="slide-content">
+              <ul>
+                <li>A single level model relates a "random" outcome to explanatory information</li>
+                <li>Examples: single and multiple linear regression, logistic regression (how do they differ?)</li>
+              </ul>
+            </h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
     <div class="item">
       <div class="inner cover">
         <h1 class="cover-heading">Section 2 Slide 2.</h1>
@@ -20,15 +75,7 @@
 
       </div>
     </div>
-    This stays
   </div>
-
-  <!-- Indicators -->
-  <ol class="carousel-indicators">
-    <li data-target="#carousel-generic" data-slide-to="0" class="active"></li>
-    <li data-target="#carousel-generic" data-slide-to="1"></li>
-    <li data-target="#carousel-generic" data-slide-to="2"></li>
-  </ol>
   <!-- Controls -->
   <a class="left carousel-control" href="#carousel-generic" data-slide="prev">
     <span class="glyphicon glyphicon-chevron-left"></span>

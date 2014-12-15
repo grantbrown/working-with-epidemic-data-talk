@@ -4,7 +4,7 @@
 var runAfricaDataMap = function(){
   var self = this;
   self.playing = false;
-  self.containerDiv = $("africa-map-cotainer");
+  self.containerDiv = $("#africa-map-container");
 
   self.rChartsCtrl = function($scope){
     $scope.Day = 1;
@@ -15,10 +15,16 @@ var runAfricaDataMap = function(){
   }
 
   self.buildDatamap = function(){
-    self.containerDiv =  $("africa-map-cotainer");
-    if (self.containerDiv == null){return;}
-    if (self.chartParams == null){
-
+    console.log("Building DM.")
+    self.containerDiv =  $("#africa-map-container");
+    self.playing = false;
+    if (self.containerDiv.length == 0){
+      console.log("Deleting zoom");
+      delete self.zoom;
+      return;
+    }
+    if (self.zoom == null){
+      console.log("Creating New DM");
       self.chartParams={"dom": "zoom_map",
       "scope": "world",
       "legend":true,
@@ -87,11 +93,11 @@ var runAfricaDataMap = function(){
       self.zoom = new Datamap(self.chartParams);
 
       if (self.chartParams.labels){
-        self.zoom.labels()
+        self.zoom.labels();
       }
 
       if (self.chartParams.legend){
-        self.zoom.legend()
+        self.zoom.legend();
       }
     }
     else{
@@ -101,10 +107,12 @@ var runAfricaDataMap = function(){
 
   self.resize = function(){
     var svg = $("svg");
-    var newWidth = svg.parent().width();
-    var newHeight = svg.parent().height();
-    svg.height(400);
-    svg.width(780);
+    if (svg != null){
+      var newWidth = svg.parent().width();
+      var newHeight = svg.parent().height();
+      svg.height(400);
+      svg.width(780);
+    }
   }
 
 
@@ -176,7 +184,7 @@ var runAfricaDataMap = function(){
   }
 
   self.wireUpControls = function(){
-    if (self.containerDiv == null){return;}
+    if (self.containerDiv.length == 0){return;}
     var zmp = $("#zoom-map-play");
     if (zmp != null){
       zmp.unbind();
