@@ -7,12 +7,19 @@
         <h1 class="cover-heading slide-title">Novel Developments in SEIR(S) Models</h1>
         <div class="row">
           <div class = "col-sm-2"></div>
+          <div class = "col-sm-8">
+              <p class="slide-content">My research expands on the traditional SEIR model in four principal ways. </p>
+          </div>
+          <div class="col-sm-2"></div>
+        </div>
+        <div class = "row">
+          <div class = "col-sm-2"></div>
           <div class = "col-sm-10 presentation-ul">
             <h3 class="slide-content">
               <ul>
                 <li>Spatial generalization</li>
                 <li>Exposure and recovery process linear models</li>
-                <li>Model specification diagnostic work</li>
+                <li>Model selection and diagnostic work</li>
                 <li>Software implementation</li>
               </ul>
             </h3>
@@ -28,7 +35,7 @@
         <p class="lead slide-content">Spatial Generalization - Motivating Assumptions</p>
         <div class="row">
           <div class = "col-sm-2"></div>
-          <div class = "col-sm-10 presentation-ul">
+          <div class = "col-sm-9 presentation-ul">
             <h3 class="slide-content">
               <ul>
                 <li>The number of contacts between individuals in a spatial location follows a Poisson distribution.</li>
@@ -37,6 +44,7 @@
               </ul>
             </h3>
           </div>
+          <div class="col-sm-1"></div>
         </div>
       </div>
     </div>
@@ -73,7 +81,6 @@
           <p class = "slide-content">
             <div class ="col-sm-1"></div>
             <div class="col-sm-11 presentation-ul">
-
                 <ul class="slide-content">
                   <li>Generalization of intensity process structure has some history in the literature (i.e., Lekone and Finenstadt, 2006),
                   though it is generally presented differently for each problem. We have developed a general structure to tackle a wide
@@ -82,10 +89,109 @@
                   <li>The same structure is employed for reinfection, allowing the study of pathogen mutation and waning vaccine efficacy among other things.
                   </li>
                 </ul>
+                <p class="slide-content">Examples of the former are further explored in the case studies.</p>
             </div>
           <p>
         </div>
       </div>
+    </div>
+
+    <div class="item">
+      <!--<img src="..." alt="...">-->
+      <div class="inner cover">
+        <h1 class="cover-heading slide-title">Novel Developments in SEIR(S) Models</h1>
+        <p class="lead slide-content">Model Selection and Diagnostic Tools</p>
+        <div class = "row">
+          <p class = "slide-content">
+            <div class ="col-sm-1"></div>
+            <div class="col-sm-11 presentation-ul">
+              <p class="slide-content"> Model selection techniques are crucially important for observational data analysis, but can be difficult to implement for complicated
+              hierarchical models.
+              </p>
+                <ul class="slide-content">
+
+                  <li> Running many potential candidate models is impractical when each one requires hours or days.</li>
+                  <li> Traditional methods like cross validation are not applicable.</li>
+                  <li> These models tend to be implemented "by hand", and so lack general software in which to
+                  test multiple approaches.</li>
+                </ul>
+                <p class="slide-content">We have developed a promising diagnostic tool that addresses these issues, though we must first define the "basic reproductive number".</p>
+            </div>
+          <p>
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="inner cover">
+        <h1 class="cover-heading slide-title">Novel Developments in SEIR(S) Models</h1>
+        <p class="lead slide-content">The Basic Reproductive Number</p>
+        <div class = "row">
+          <p class = "slide-content">
+            <div class ="col-sm-1"></div>
+            <div class="col-sm-11">
+
+                <div class="col-sm-11 presentation-ul">
+                  <ul class="slide-content">
+                  <li>The basic reproductive number, or R<sub>0</sub>, is defined as <i>"The expected number of secondary infections caused by a
+                    single infectious individual in an entirely susceptible population."</i></li>
+                  <li>Epidemiologists and infectious disease experts use this quantity as a "threshold" parameters.</li>
+                  <li>When R<sub>0</sub> is below 1, the disease is not expected to spread.</li>
+                  <li>When R<sub>0</sub> is greater than one, a disease is expected to invade the population.</li>
+                  </ul>
+                  <p class="slide-content"></p>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="item">
+      <div class="inner cover">
+        <h1 class="cover-heading slide-title">Novel Developments in SEIR(S) Models</h1>
+        <p class="lead slide-content">The Basic Reproductive Number</p>
+        <div class = "row">
+          <p class = "slide-content">
+            <div class ="col-sm-1"></div>
+            <div class="col-sm-11">
+
+                <div class="col-sm-11 presentation-ul">
+                  <ul class="slide-content">
+                    <li>This quantity, while incredibly useful, is somewhat removed from actual epidemic behavior.</li>
+                    <li>R<sub>0</sub> estimates depend entirely on the parametric form of the intensity process.</li>
+                    <li>The measure is therefore extremely sensitive to model misspecification.</li>
+                    <li>We propose an additional measure which considers the expected number of secondary infections caused by
+                      an infectious individual in a population under study. This definition sounds similar to concepts like "effective R<sub>0</sub>" (Chowell et.al. 2005)
+                      and the replacement ratio (Hethcote 2000), but our development is mathematically distinct.</li>
+                  </ul>
+                  <p class="slide-content"></p>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="item">
+      <div class="inner cover">
+        <h1 class="cover-heading slide-title">Novel Developments in SEIR(S) Models</h1>
+        <p class="lead slide-content">Software Development</p>
+        <div class = "row">
+          <p class = "slide-content">
+            <div class ="col-sm-1"></div>
+            <div class="col-sm-11">
+                <div class="col-sm-11 presentation-ul">
+                  <ul class="slide-content">
+                    <li>While building these models can be quite difficult, it doesn't need to be.</li>
+                    <li>All of this development has been compiled into an open source package for the R statistical computing environment.</li>
+                    <li>The numerical heavy lifting is done in C++ with optional use of the OpenCL parallel processing framework.</li>
+                    <li>While the user must still write some code, they interact with pre-made model types, much like standard statistical software.</li>
+                    <li>This effort aims to expand both the scope of models which are practical to fit, and the group of people capable of easily using them.</li>
+                  </ul>
+                  <p class="slide-content"></p>
+                </div>
+            </div>
+          </div>
+        </div>
     </div>
 
   </div>
