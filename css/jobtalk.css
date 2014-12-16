@@ -24,6 +24,11 @@
     font-size: 3em; /* 40px/16=2.5em */
 }
 
+
+.slide-content-sm {
+    font-size: 1.5em; /* 40px/16=2.5em */
+}
+
 .canvas-control-div{
   margin-bottom:50px;
 }
