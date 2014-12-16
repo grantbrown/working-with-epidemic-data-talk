@@ -14,6 +14,29 @@ var runAfricaDataMap = function(){
     });
   }
 
+  self.initializeText = function(){
+    var yoffs = 10;
+    var xoffs = 10;
+    var epiData = [
+      { "x": 130-xoffs, "y": 250-yoffs, "name":"GIN"},
+      { "x": 200-xoffs, "y": 305-yoffs, "name":"LBR"},
+      { "x": 165-xoffs, "y": 280-yoffs, "name":"SLE"},
+      { "x": 430-xoffs, "y": 250-yoffs, "name":"NGA"},
+      { "x": 100-xoffs, "y": 200-yoffs, "name":"SEN"},
+      { "x": 250-xoffs, "y": 200-yoffs, "name":"MLI"}];
+
+    self.text = self.zoom.svg.selectAll("text").data(epiData).enter().append("text");
+    self.zoom.svg.selectAll("text").data(epiData).enter().append("text");
+    self.textLabels = self.text
+                     .attr("x", function(d) { return d.x; })
+                     .attr("y", function(d) { return d.y; })
+                     .text( function (d) { return("0"); })
+                             .attr("font-family", "sans-serif")
+                     .attr("font-size", "20px")
+                     .attr("fill", "red");
+
+  }
+
   self.buildDatamap = function(){
     console.log("Building DM.")
     self.containerDiv =  $("#africa-map-container");
@@ -100,31 +123,7 @@ var runAfricaDataMap = function(){
         self.zoom.legend();
       }
 
-
-      var yoffs = 10;
-      var xoffs = 10;
-      var epiData = [
-        { "x": 130-xoffs, "y": 250-yoffs, "name":"GIN"},
-        { "x": 200-xoffs, "y": 305-yoffs, "name":"LBR"},
-        { "x": 165-xoffs, "y": 280-yoffs, "name":"SLE"},
-        { "x": 430-xoffs, "y": 250-yoffs, "name":"NGA"},
-        { "x": 100-xoffs, "y": 200-yoffs, "name":"SEN"},
-        { "x": 250-xoffs, "y": 200-yoffs, "name":"MLI"}];
-
-
-      var svgContainer = d3.select("svg");
-
-      var text = svgContainer.selectAll("text")
-                              .data(epiData)
-                              .enter()
-                           .append("text");
-      var textLabels = text
-                       .attr("x", function(d) { return d.x; })
-                       .attr("y", function(d) { return d.y; })
-                       .text( function (d) { return("("+ d.name + ")"); })
-                       .attr("font-family", "sans-serif")
-                       .attr("font-size", "20px")
-                       .attr("fill", "red");
+      self.initializeText();
 
     }
     else{
@@ -153,7 +152,15 @@ var runAfricaDataMap = function(){
         self.playing = false;
         clearInterval(self.intervalVariable);
         $("#zoom-map-play").text("Play");
-        var txt = d3.select("svg").selectAll("text");
+
+        var txt = self.zoom.svg.selectAll("text");
+        if (txt == null || txt.length == 0){
+          console.log("Didn't find txt instance.");
+          self.initializeText();
+          txt = self.zoom.svg.selectAll("text");
+        }
+
+
         txt[0][0].textContent = alldata[1].GIN.caseCount;
         txt[0][1].textContent = alldata[1].LBR.caseCount;
         txt[0][2].textContent = alldata[1].SLE.caseCount;
@@ -176,7 +183,12 @@ var runAfricaDataMap = function(){
         self.zoom.updateChoropleth(alldata[sliderVal]);
 
 
-        var txt = d3.select("svg").selectAll("text");
+        var txt = self.zoom.svg.selectAll("text");
+        if (txt == null || txt.length == 0){
+          console.log("Didn't find txt instance while running.");
+          self.initializeText();
+          txt = self.zoom.svg.selectAll("text");
+        }
 
         txt[0][0].textContent = alldata[sliderVal].GIN.caseCount;
         txt[0][1].textContent = alldata[sliderVal].LBR.caseCount;

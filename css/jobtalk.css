@@ -25,10 +25,9 @@
 }
 
 .hangingindent {
-  padding-left: 22px ;
-  text-indent: -22px ;
+  padding-left: 30px ;
+  text-indent: -10px ;
 }
-
 
 .slide-content-sm {
     font-size: 1.5em; /* 40px/16=2.5em */
