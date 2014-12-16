@@ -59,11 +59,11 @@
           <div class = "slide-content">
             <div class ="col-sm-1"></div>
             <div class="col-sm-10">
-              <p class = "slide-content">
+              <p>
               Based on these assumptions and their associated parameters, we can derive a parametric form for the exposure probability at a particular time point
               and spatial location, which is required to construct the HM. The result is a flexible parameterization that can accommodate
               numerous population structures.</p>
-              <p class = "slide-content">
+              <p>
               Details on the derivation are available in <i>
                 <a href="https://github.com/grantbrown/libspatialSEIR/blob/master/doc/models/SEIR_Algo.pdf?raw=TRUE"
                 class="externalLink">this</a></i> document, but are beyond the scope of this talk.
@@ -83,7 +83,7 @@
           <div class = "slide-content">
             <div class ="col-sm-1"></div>
             <div class="col-sm-11 presentation-ul">
-                <ul class="slide-content">
+                <ul>
                   <li>Generalization of intensity process structure has some history in the literature (i.e., Lekone and Finkenstadt, 2006),
                   though it is generally presented differently for each problem. We have developed a general structure to tackle a wide
                   variety of hypotheses, as well as to provide appropriate temporal bases for prediction in the absence of full information
@@ -91,7 +91,7 @@
                   <li>The same structure is employed for reinfection, allowing the study of pathogen mutation and waning vaccine efficacy among other things.
                   </li>
                 </ul>
-                <p class="slide-content">Examples of the former are further explored in the case studies.</p>
+                <p>Examples of the former are further explored in the case studies.</p>
             </div>
           </div>
         </div>
@@ -107,17 +107,17 @@
           <div class = "slide-content">
             <div class ="col-sm-1"></div>
             <div class="col-sm-11 presentation-ul">
-              <p class="slide-content"> Model selection techniques are crucially important for observational data analysis, but can be difficult to implement for complicated
+              <p> Model selection techniques are crucially important for observational data analysis, but can be difficult to implement for complicated
               hierarchical models.
               </p>
-                <ul class="slide-content">
+                <ul>
 
                   <li> Running many potential candidate models is impractical when each one requires hours or days.</li>
                   <li> Traditional methods like cross validation are not applicable.</li>
                   <li> These models tend to be implemented "by hand", and so lack general software in which to
                   test multiple approaches.</li>
                 </ul>
-                <p class="slide-content">We have developed a promising diagnostic tool that addresses these issues, though we must first define the "basic reproductive number".</p>
+                <p>We have developed a promising diagnostic tool that addresses these issues, though we must first define the "basic reproductive number".</p>
             </div>
           </div>
         </div>
@@ -134,14 +134,14 @@
             <div class="col-sm-11">
 
                 <div class="col-sm-11 presentation-ul">
-                  <ul class="slide-content">
+                  <ul>
                   <li>The basic reproductive number, or R<sub>0</sub>, is defined as <i>"The expected number of secondary infections caused by a
                     single infectious individual in an entirely susceptible population."</i></li>
                   <li>Epidemiologists and infectious disease experts use this quantity as a "threshold" parameters.</li>
                   <li>When R<sub>0</sub> is below 1, the disease is not expected to spread.</li>
                   <li>When R<sub>0</sub> is greater than one, a disease is expected to invade the population.</li>
                   </ul>
-                  <p class="slide-content"></p>
+                  <p></p>
                 </div>
             </div>
           </div>
@@ -159,14 +159,14 @@
             <div class="col-sm-11">
 
                 <div class="col-sm-11 presentation-ul">
-                  <ul class="slide-content">
+                  <ul>
                     <li>This quantity, while incredibly useful, is somewhat removed from actual epidemic behavior.</li>
                     <li>R<sub>0</sub> estimates depend entirely on the parametric form of the intensity process.</li>
                     <li>The measure is therefore extremely sensitive to model misspecification.</li>
                     <li>We propose an additional measure, R<sup>(EA)</sup>, which considers the expected number of secondary infections caused by
                       an infectious individual in a population under study.*</li>
                   </ul>
-                  <p class="slide-content-sm">
+                  <p>
 
                     *This definition sounds similar to concepts like "effective R<sub>0</sub>" (Chowell et.al. 2004)
                     and the replacement ratio (Hethcote 2000), but our development is mathematically distinct.
@@ -187,14 +187,14 @@
             <div class ="col-sm-1"></div>
             <div class="col-sm-11">
                 <div class="col-sm-11 presentation-ul">
-                  <ul class="slide-content">
+                  <ul>
                     <li>While building these models can be quite difficult, it doesn't need to be.</li>
                     <li>All of this development has been compiled into an open source package for the R statistical computing environment.</li>
                     <li>The numerical heavy lifting is done in C++ with optional use of the OpenCL parallel processing framework.</li>
                     <li>While the user must still write some code, they interact with pre-made model types, much like standard statistical software.</li>
                     <li>This effort aims to expand both the scope of models which are practical to fit, and the group of people capable of easily using them.</li>
                   </ul>
-                  <p class="slide-content"></p>
+                  <p></p>
                 </div>
             </div>
           </div>
