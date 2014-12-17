@@ -221,7 +221,7 @@ var runAfricaDataMap = function(){
           }
       });
     }
-    self.data_app = angular.module('data_app', []);
+    //self.data_app = angular.module('data_app', []);
   }
 }
 
