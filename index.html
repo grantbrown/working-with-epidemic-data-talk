@@ -174,7 +174,7 @@
           console.log("Switching to: " + toplevel);
           swapContent("main-content", contentHolder, "./slides/" + toplevel + ".html",0, function(){
             if (type != null){
-                $("#carousel-generic").carousel(val);
+                $("#carousel-generic").carousel(eval(val));
             }
             else {
             }
